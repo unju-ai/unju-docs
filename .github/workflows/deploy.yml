@@ -1,0 +1,55 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [openapi-updated]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Fetch latest openapi.json from unju-api main branch
+      - name: Sync OpenAPI spec
+        run: |
+          curl -sL \
+            -H "Accept: application/vnd.github.raw+json" \
+            -H "Authorization: Bearer ${{ secrets.API_REPO_TOKEN }}" \
+            "https://api.github.com/repos/unju-ai/unju-api/contents/openapi.json?ref=main" \
+            -o openapi.json
+
+      - name: Check spec updated
+        id: check
+        run: |
+          if git diff --quiet openapi.json 2>/dev/null; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit updated spec
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add openapi.json
+          git commit -m "chore: sync openapi.json from unju-api (${{ github.event.client_payload.sha || 'manual' }})"
+          git push
+
+      - name: Build docs
+        run: node build.js
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=unju-docs
