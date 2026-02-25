@@ -30,6 +30,7 @@ Proposals — some implemented, some in-flight, some not yet started.
 | [RFC-016](rfc/RFC-016-unju-perps-mcp-server.md) | Unju-Perps MCP Server with Interactive UIs (MCP Apps) | ✅ Implemented (Phase 1) | unju-perps | 2026-02-25 |
 | [RFC-017](rfc/RFC-017-unju-agent-wallet.md) | Unju Agent Wallet — MetaMask Fork + ERC-4337 + Rust Core | 💡 Proposed | unju-wallet | 2026-02-25 |
 | [RFC-018](rfc/RFC-018-wallet-first-identity.md) | Wallet-First Identity System with SIWE & Virtual Emails | 🔄 Draft | unju-wallet | 2026-02-25 |
+| [RFC-019](rfc/RFC-019-graph-memory-architecture.md) | Graph Memory Architecture — PostgreSQL SQL/PGQ vs Neo4j | 🔄 Draft | unju-memory | 2026-02-25 |
 
 ---
 
