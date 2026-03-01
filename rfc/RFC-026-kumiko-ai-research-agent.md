@@ -41,7 +41,46 @@ User (Telegram) → Green Tara → kumiko-handler.py → arXiv API
 - Basic keyword search
 - No knowledge graph
 
-### Target (Phase 2+) - Full unju Integration
+### Target (Phase 2+) - Full unju Integration with Research Swarm
+
+**Kumiko orchestrates specialized sub-agents:**
+
+```
+                    KUMIKO (Orchestrator)
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+   SCREENER           DEEP READER        TREND ANALYST
+  (Quick triage)    (Full analysis)    (Pattern detection)
+   100→20 papers      20→10 quality      Weekly trends
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           │
+                    KNOWLEDGE GRAPH
+                  (Citations, authors,
+                   techniques, datasets)
+```
+
+**Sub-agent roles:**
+1. **Paper Screener** - Fast filter (score 0-100), top 20%
+2. **Deep Reader** - Thorough analysis, structured summaries
+3. **Citation Tracker** - Build knowledge graph
+4. **Trend Analyst** - Detect hot topics, emerging techniques
+5. **Quality Assessor** - Rigor check, red flag detection
+
+**Daily pipeline:**
+```
+100 papers (arXiv) 
+  → Screener (parallel) 
+  → 20 high-priority
+  → Deep Reader 
+  → 10 analyzed
+  → Quality Check 
+  → 5-8 stored in memory
+  → Knowledge Graph updated
+```
+
+### Full Integration Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
